@@ -18,7 +18,7 @@ roles.sourcer.settings = {
   prefixString: {
     1: 'MWCW',
     2: 'MWCWWW',
-    3: 'MWcWWWW',
+    3: 'MWCWWWW',
   },
   layoutString: {
     2: 'M',
