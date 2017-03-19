@@ -22,11 +22,11 @@ Room.prototype.getPriority = function(object) {
   let priority = config.priorityQueue;
   let target = object.routing && object.routing.targetRoom;
   if (target === this.name) {
-    return priority.sameRoom[object.role] || 4;
+    return priority.sameRoom[object.role] || priority.sameRoom.default || 4;
   } else if (target) {
-    return priority.otherRoom[object.role] || 20 + Game.map.getRoomLinearDistance(this.name, target);
+    return priority.otherRoom[object.role] || priority.otherRoom['default'] + Game.map.getRoomLinearDistance(this.name, target);
   } else {
-    return 12;
+    return priority.default;
   }
 };
 
