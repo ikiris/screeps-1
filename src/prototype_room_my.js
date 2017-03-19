@@ -321,6 +321,8 @@ Room.prototype.executeRoom = function() {
       if (room.controller.level === 2 || room.controller.level === 3) {
         amount = 5;
       }
+    } else if (room.storage < 500 && _.filter(creepsInRoom, function(creep) { return creep.memory.role == 'sourcer' && creep.memory.routing.targetid == this.name; }).length === 0) {
+      amount = 5;
     }
     this.checkRoleToSpawn('harvester', amount, 'harvester');
   }
