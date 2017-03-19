@@ -15,15 +15,16 @@ roles.sourcer = {};
 
 roles.sourcer.settings = {
   param: ['controller.level'],
-  prefixString: 'MWC',
+  prefixString: {
+    1: 'MWCW',
+    2: 'MWCWWW',
+    3: 'MWcWWWW',
+  },
   layoutString: {
-    1: 'W',
-    3: 'MW',
-    5: 'MWW'
+    2: 'M',
   },
   maxLayoutAmount: {
-    1: 4,
-    5: 2,
+    1: 2,
   },
   // sufixString: {
   //   4: 'MCWH'
