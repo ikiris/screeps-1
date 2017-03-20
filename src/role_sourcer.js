@@ -14,14 +14,20 @@
 roles.sourcer = {};
 
 roles.sourcer.settings = {
-  param: ['controller.level'],
+  param: ['controller.level', 'energyCapacityAvailable'],
   prefixString: {
-    1: 'MWCW',
-    2: 'MWCWWW',
-    3: 'MWCWWWW',
+    1: {
+      300: 'WC',
+      500: 'WCWW',
+      600: 'WCWWW',
+      800: 'WCMWWWW',
+    }
   },
   layoutString: {
-    2: 'M',
+    1: {
+      300: 'WM',
+      800: 'M',
+    }
   },
   maxLayoutAmount: {
     1: 2,
