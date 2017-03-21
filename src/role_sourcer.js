@@ -18,8 +18,8 @@ roles.sourcer.settings = {
   prefixString: {
     1: {
       300: 'WC',
-      500: 'WCWW',
-      600: 'WCWWW',
+      500: 'WCWWM',
+      600: 'WCWWWM',
       800: 'WCMWWWW',
     }
   },
