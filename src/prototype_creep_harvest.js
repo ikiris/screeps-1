@@ -90,7 +90,7 @@ Creep.prototype.spawnCarry = function() {
       this.memory.wait = 0;
     }
     if (this.memory.wait <= 0) {
-      if (this.room.memory.roles.carry) {
+      if (this.room.memory.roles && this.room.memory.roles.carry) {
         this.room.memory.roles.carry = false;
       }
       Game.rooms[this.memory.base].checkRoleToSpawn('carry', 2, this.memory.routing.targetId, this.memory.routing.targetRoom);
