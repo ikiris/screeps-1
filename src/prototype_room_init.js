@@ -31,10 +31,12 @@ Room.prototype.initSetMinerals = function() {
   let minerals = this.find(FIND_MINERALS);
   for (let mineral of minerals) {
     let extractor = mineral.pos.findNearPosition().next().value;
-    this.memory.position.creep[mineral.id] = extractor;
-    this.memory.position.structure.extractor.push(mineral.pos);
-    costMatrix.set(extractor.x, extractor.y, config.layout.creepAvoid);
-    this.setMemoryCostMatrix(costMatrix);
+    if (extractor) {
+      this.memory.position.creep[mineral.id] = extractor;
+      this.memory.position.structure.extractor.push(mineral.pos);
+      costMatrix.set(extractor.x, extractor.y, config.layout.creepAvoid);
+      this.setMemoryCostMatrix(costMatrix);
+    }
   }
 };
 

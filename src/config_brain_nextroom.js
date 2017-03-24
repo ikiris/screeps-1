@@ -15,7 +15,7 @@ brain.handleNextroom = function() {
           Game.notify('Searching for a new room from ' + room.name);
         }
         console.log('Searching for a new room from ' + room.name);
-	/*
+        /*
         room.memory.queue.push({
           role: 'scoutnextroom'
         });
