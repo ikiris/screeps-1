@@ -695,22 +695,6 @@ Creep.prototype.transferEnergyMy = function() {
 };
 
 Creep.prototype.handleReserver = function() {
-  if (config.creep.reserverDefender) {
-    var hostiles = this.room.getEnemys();
-    if (hostiles.length > 0) {
-      //this.log('Reserver under attack');
-      if (!this.memory.defender_called) {
-        Game.rooms[this.memory.base].memory.queue.push({
-          role: 'defender',
-          routing: {
-            targetRoom: this.room.name
-          },
-        });
-        this.memory.defender_called = true;
-      }
-    }
-  }
-
   if (this.room.name != this.memory.routing.targetRoom) {
     this.memory.routing.reached = false;
     return false;
@@ -757,6 +741,22 @@ Creep.prototype.handleReserver = function() {
   };
 
   callCleaner(this);
+
+  if (config.creep.reserverDefender) {
+    var hostiles = this.room.getEnemys();
+    if (hostiles.length > 0) {
+      //this.log('Reserver under attack');
+      if (!this.memory.defender_called) {
+        Game.rooms[this.memory.base].memory.queue.push({
+          role: 'defender',
+          routing: {
+            targetRoom: this.room.name
+          },
+        });
+        this.memory.defender_called = true;
+      }
+    }
+  }
 
   if (Game.time % 100 === 0 && this.room.controller.reservation && this.room.controller.reservation.username === Memory.username) {
     let checkSourcer = function(creep) {
