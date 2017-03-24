@@ -52,7 +52,7 @@ brain.isFriend = function(name) {
     Memory.players = {};
   }
 
-  if (name == "Invader") {
+  if (name == 'Invader') {
     return false;
   }
   if (friends.indexOf(name) > -1) {
