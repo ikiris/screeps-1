@@ -183,7 +183,7 @@ Room.prototype.getSettings = function(creep) {
   if (creep.role === 'sourcer' && creep.routing.targetRoom === this.name) {
 
     if (_.filter(this.find(FIND_MY_CREEPS), function(c) {
-        return (c.role === 'sourcer' && c.routing.targetRoom === this.name);
+        return (c.memory.role === 'sourcer' && c.memory.routing.targetRoom === this.name);
       }).length === 0) {
       console.log('fallback sourcer!');
       settings = {
