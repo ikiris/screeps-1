@@ -22,9 +22,12 @@ roles.harvester.settings = {
   layoutString: 'MWC',
   amount: {
     1: [2, 1, 1],
-    3: [2, 2, 2],
+    3: [1, 1, 1],
   },
-  maxLayoutAmount: 6,
+  maxLayoutAmount: {
+    1: 6,
+    3: 12,
+  },
 };
 roles.harvester.updateSettings = function(room, creep) {
   if (room.storage && room.storage.store.energy > config.creep.energyFromStorageThreshold) {
