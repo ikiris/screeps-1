@@ -187,7 +187,7 @@ Room.prototype.getSettings = function(creep) {
       }).length === 0) {
       console.log('fallback sourcer!');
       settings = {
-        param: ['energyAvaliable'],
+        param: ['energyAvailable'],
         prefixString: {
           1: 'WCM',
           450: 'WWCM',
