@@ -179,6 +179,31 @@ Room.prototype.getSettings = function(creep) {
   let role = creep.role;
   let updateSettings = roles[role].updateSettings && roles[role].updateSettings(this, creep);
   let settings = _.merge(roles[role].settings, updateSettings);
+
+  if (creep.role === 'sourcer' && creep.routing.targetRoom === this.name) {
+
+    if (_.filter(this.find(FIND_MY_CREEPS), function(c) {
+        return (c.role === 'sourcer' && c.routing.targetRoom === this.name);
+      }).length === 0) {
+      console.log('fallback sourcer!');
+      settings = {
+        param: ['energyAvaliable'],
+        prefixString: {
+          1: 'WCM',
+          450: 'WWCM',
+          600: 'WWWCM',
+          700: 'WWWWCMM',
+          850: 'WWWWCMMM',
+        },
+        layoutString: {
+          1: 'M',
+        },
+        maxLayoutAmount: {
+          1: 1,
+        },
+      };
+    }
+  }
   if (!settings) {
     this.log('try to spawn ', role, ' but settings are not done. Abort spawn');
     return;
