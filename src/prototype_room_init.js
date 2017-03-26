@@ -87,6 +87,9 @@ Room.prototype.setFillerArea = function(storagePos, route) {
     for (let linkStoragePos of linkStoragePosIterator) {
       this.memory.position.structure.link.unshift(linkStoragePos);
 
+      costMatrix.set(linkStoragePos.x, linkStoragePos.y, config.layout.structureAvoid);
+      this.setMemoryCostMatrix(costMatrix);
+
       let powerSpawnPosIterator = fillerPos.findNearPosition();
       for (let powerSpawnPos of powerSpawnPosIterator) {
         this.memory.position.structure.powerSpawn.push(powerSpawnPos);
