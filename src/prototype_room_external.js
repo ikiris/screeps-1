@@ -277,6 +277,26 @@ Room.prototype.checkAndSpawnReserver = function() {
 Room.prototype.handleReservedRoom = function() {
   this.memory.state = 'Reserved';
   this.memory.lastSeen = Game.time;
+
+  if (!config.creep.reserverDefender && Game.time % 10) {
+    var hostiles = this.room.getEnemys();
+    if (hostiles.length > 0) {
+      this.memory.lastHostile = Game.time;
+    }
+    if (!(Game.time - this.memory.lastHostile > 600)) {
+      roomName = this.name;
+      if (hostiles.length < _.filter(Game.find(FIND_MY_CREEPS, (c) => c.memory.role === 'defender' && c.memory.routing.targetRoom === roomName)) && (!this.memory.defender_last_called || Game.time - this.memory.defender_last_called > 200)) {
+        Game.rooms[this.memory.base].memory.queue.push({
+          role: 'defender',
+          routing: {
+            targetRoom: this.room.name
+          },
+        });
+        this.memory.defender_last_called = Game.time;
+      }
+    }
+  }
+
   if (this.memory.lastChecked !== undefined &&
     Game.time - this.memory.lastChecked < 500) {
     return false;
