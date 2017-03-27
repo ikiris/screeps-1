@@ -283,7 +283,17 @@ Room.prototype.handleReservedRoom = function() {
   }
   this.memory.lastChecked = Game.time;
 
-  var hostiles = this.getEnemys();
+  this.checkHostiles();
+
+  this.checkSourcers();
+
+  this.checkReservers();
+
+  return false;
+};
+
+Room.prototype.checkHostiles = function() {
+  let hostiles = this.getEnemys();
   if (hostiles.length > 0) {
     this.memory.lastHostile = Game.time;
   }
@@ -300,14 +310,33 @@ Room.prototype.handleReservedRoom = function() {
     }
   }
 
-
   let idiotCreeps = _.filter(hostiles, {
     filter: this.findAttackCreeps
   });
   for (let idiotCreep of idiotCreeps) {
     brain.increaseIdiot(idiotCreep.owner.username);
   }
+};
 
+Room.prototype.checkSourcers = function() {
+  if (this.room.controller.reservation && this.room.controller.reservation.username === Memory.username) {
+    let sources = this.find(FIND_SOURCES);
+    let roomName = this.name;
+    let sourcers = {};
+
+    for(let s in _.filter(Game.creeps, (c) => c.memory.role === 'sourcer' && c.memory.routing.targetRoom === roomName)) {
+      sourcer[s.memory.routing.targetId] = s.name;
+    }
+
+    if (sourcers.length < sources.length) {
+      if (sourcer.id === undefined) {
+        Game.rooms[creep.memory.base].checkRoleToSpawn('sourcer', 1, source.id, source.pos.roomName);
+      }
+    }
+  }
+};
+
+Room.prototype.checkReservers = function() {
   if (this.controller.reservation.ticksToEnd > 1000) {
     return false;
   }
@@ -317,7 +346,6 @@ Room.prototype.handleReservedRoom = function() {
   if (reservers.length === 0) {
     this.checkAndSpawnReserver();
   }
-  return false;
 };
 
 Room.prototype.handleUnreservedRoom = function() {
@@ -377,22 +405,6 @@ Room.prototype.handleUnreservedRoom = function() {
           this.memory.state = 'Reserved';
           break;
         }
-      }
-    }
-  }
-
-  if (this.room.controller.reservation && this.room.controller.reservation.username === Memory.username) {
-    let sources = this.find(FIND_SOURCES);
-    let roomName = this.name;
-    let sourcers = {};
-
-    for(let s in _.filter(Game.creeps, (c) => c.memory.role === 'sourcer' && c.memory.routing.targetRoom === roomName)) {
-      sourcer[s.memory.routing.targetId] = s.name;
-    }
-
-    if (sourcers.length < sources.length) {
-      if (sourcer.id === undefined) {
-        Game.rooms[creep.memory.base].checkRoleToSpawn('sourcer', 1, source.id, source.pos.roomName);
       }
     }
   }
