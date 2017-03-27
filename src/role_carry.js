@@ -16,7 +16,7 @@ roles.carry.flee = true;
 roles.carry.boostActions = ['capacity'];
 
 roles.carry.settings = {
-  prefixString: 'W',
+  prefixString: 'WMC',
   layoutString: 'MC',
   amount: [1, 2]
 };
