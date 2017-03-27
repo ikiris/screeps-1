@@ -32,9 +32,9 @@ roles.sourcer.settings = {
   maxLayoutAmount: {
     1: 2,
   },
-  // sufixString: {
-  //   4: 'MCWH'
-  // }
+  sufixString: {
+    4: 'MCWH'
+  }
 };
 
 roles.sourcer.buildRoad = true;
