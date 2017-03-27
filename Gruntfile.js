@@ -49,7 +49,33 @@ module.exports = function(grunt) {
       }
     },
     mochaTest: {
-      src: ['test/**/*.js']
+        test: {
+            options: {
+                reporter: 'spec',
+                // Require blanket wrapper here to instrument other required
+                // files on the fly.
+                //
+                // NB. We cannot require blanket directly as it
+                // detects that we are not running mocha cli and loads differently.
+                //
+                // NNB. As mocha is 'clever' enough to only run the tests once for
+                // each file the following coverage task does not actually run any
+                // tests which is why the coverage instrumentation has to be done here
+                require: 'coverage/blanket'
+            },
+            src: ['test/**/*.js']
+        },
+        coverage: {
+            options: {
+                reporter: 'html-cov',
+                // use the quiet flag to suppress the mocha console output
+                quiet: true,
+                // specify a destination file to capture the mocha
+                // output (the quiet option does not suppress this)
+                captureFile: 'coverage.html'
+            },
+            src: ['test/**/*.js']
+        }
     },
     jscs: {
       src: 'src/*.js'
@@ -217,11 +243,11 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['jshint', 'jsbeautifier', 'jscs', 'clean', 'copy:uglify', 'copy:main', 'copy:profiler', 'copy:visualizer', 'screeps']);
-  grunt.registerTask('release', ['jshint', 'jsbeautifier', 'jscs', 'clean', 'uglify', 'copy:main', 'requireFile', 'sync']);
-  grunt.registerTask('local', ['jshint', 'jsbeautifier', 'jscs', 'clean', 'copy:uglify', 'copy:main', 'copy:profiler', 'copy:visualizer', 'sync']);
-  grunt.registerTask('test', ['jshint', 'jscs']);
-  grunt.registerTask('dev', ['jshint', 'jsbeautifier', 'jscs']);
+  grunt.registerTask('default', ['jshint', 'jsbeautifier', 'jscs', 'mochaTest', 'clean', 'copy:uglify', 'copy:main', 'copy:profiler', 'copy:visualizer', 'screeps']);
+  grunt.registerTask('release', ['jshint', 'jsbeautifier', 'jscs', 'mochaTest', 'clean', 'uglify', 'copy:main', 'requireFile', 'sync']);
+  grunt.registerTask('local', ['jshint', 'jsbeautifier', 'jscs', 'mochaTest', 'clean', 'copy:uglify', 'copy:main', 'copy:profiler', 'copy:visualizer', 'sync']);
+  grunt.registerTask('test', ['jshint', 'jscs', 'mochaTest']);
+  grunt.registerTask('dev', ['jshint', 'jsbeautifier', 'jscs', 'mochaTest']);
   grunt.registerTask('requireFile', 'Creates an empty file', function() {
     grunt.file.write('dist/require.js', '');
   });
