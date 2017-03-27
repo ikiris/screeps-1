@@ -278,39 +278,40 @@ Room.prototype.handleReservedRoom = function() {
   this.memory.state = 'Reserved';
   this.memory.lastSeen = Game.time;
 
-  if (!config.creep.reserverDefender && Game.time % 10) {
-    var hostiles = this.getEnemys();
-    if (hostiles.length > 0) {
-      this.memory.lastHostile = Game.time;
-    }
-    if (!Game.time - this.memory.lastHostile > 600) {
-      roomName = this.name;
-      if (hostiles.length > _.filter(Game.find(FIND_MY_CREEPS, (c) => c.memory.role === 'defender' && c.memory.routing.targetRoom === roomName)) && (!this.memory.defender_last_called || Game.time - this.memory.defender_last_called > 200)) {
-        Game.rooms[this.memory.reservation.base].memory.queue.push({
-          role: 'defender',
-          routing: {
-            targetRoom: roomName
-          },
-        });
-        this.memory.defender_last_called = Game.time;
-      }
-    }
-  }
-
-  if (this.memory.lastChecked !== undefined &&
-    Game.time - this.memory.lastChecked < 500) {
+  if (this.memory.lastChecked !== undefined && Game.time - this.memory.lastChecked < 10) {
     return false;
   }
   this.memory.lastChecked = Game.time;
 
-  let idiotCreeps = this.find(FIND_HOSTILE_CREEPS, {
+  var hostiles = this.getEnemys();
+  if (hostiles.length > 0) {
+    this.memory.lastHostile = Game.time;
+  }
+  if (!Game.time - this.memory.lastHostile > 600) {
+    roomName = this.name;
+    if (hostiles.length > _.filter(Game.find(FIND_MY_CREEPS, (c) => c.memory.role === 'defender' && c.memory.routing.targetRoom === roomName)) && (!this.memory.defender_last_called || Game.time - this.memory.defender_last_called > 200)) {
+      Game.rooms[this.memory.reservation.base].memory.queue.push({
+        role: 'defender',
+        routing: {
+          targetRoom: roomName
+        },
+      });
+      this.memory.defender_last_called = Game.time;
+    }
+  }
+
+
+  let idiotCreeps = _.filter(hostiles, {
     filter: this.findAttackCreeps
   });
   for (let idiotCreep of idiotCreeps) {
     brain.increaseIdiot(idiotCreep.owner.username);
   }
 
-  let reservers = this.find(FIND_MY_CREEPS, {
+  if (this.controller.reservation.ticksToEnd > 1000) {
+    return false;
+  }
+  let reservers = _.filter(Game.creeps, {
     filter: (c) => c.memory.role === 'reserver',
   });
   if (reservers.length === 0) {
@@ -376,6 +377,22 @@ Room.prototype.handleUnreservedRoom = function() {
           this.memory.state = 'Reserved';
           break;
         }
+      }
+    }
+  }
+
+  if (this.room.controller.reservation && this.room.controller.reservation.username === Memory.username) {
+    let sources = this.find(FIND_SOURCES);
+    let roomName = this.name;
+    let sourcers = {};
+
+    for(let s in _.filter(Game.creeps, (c) => c.memory.role === 'sourcer' && c.memory.routing.targetRoom === roomName)) {
+      sourcer[s.memory.routing.targetId] = s.name;
+    }
+
+    if (sourcers.length < sources.length) {
+      if (sourcer.id === undefined) {
+        Game.rooms[creep.memory.base].checkRoleToSpawn('sourcer', 1, source.id, source.pos.roomName);
       }
     }
   }
