@@ -319,12 +319,12 @@ Room.prototype.checkHostiles = function() {
 };
 
 Room.prototype.checkSourcers = function() {
-  if (this.room.controller.reservation && this.room.controller.reservation.username === Memory.username) {
+  if (this.controller.reservation && this.controller.reservation.username === Memory.username) {
     let sources = this.find(FIND_SOURCES);
     let roomName = this.name;
     let sourcers = {};
 
-    for(let s in _.filter(Game.creeps, (c) => c.memory.role === 'sourcer' && c.memory.routing.targetRoom === roomName)) {
+    for (let s in _.filter(Game.creeps, (c) => c.memory.role === 'sourcer' && c.memory.routing.targetRoom === roomName)) {
       sourcer[s.memory.routing.targetId] = s.name;
     }
 
