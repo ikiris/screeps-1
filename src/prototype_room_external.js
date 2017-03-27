@@ -325,7 +325,7 @@ Room.prototype.checkSourcers = function() {
     let sourcers = {};
 
     for (let s in _.filter(Game.creeps, (c) => c.memory.role === 'sourcer' && c.memory.routing.targetRoom === roomName)) {
-      sourcer[s.memory.routing.targetId] = s.name;
+      sourcers[s.memory.routing.targetId] = s.name;
     }
 
     if (sourcers.length < sources.length) {
