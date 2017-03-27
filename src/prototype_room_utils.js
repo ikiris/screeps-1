@@ -83,6 +83,16 @@ Room.prototype.splitRoomName = function() {
   return result;
 };
 
+Room.prototype.isStorage = function() {
+  if (!this.storage) {
+    return this.storage;
+  }
+  if (this.controller.level < 4) {
+    return false;
+  }
+  return this.storage;
+};
+
 Room.pathToString = function(path) {
   if (!config.performance.serializePath) {
     return path;
