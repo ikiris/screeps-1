@@ -289,7 +289,7 @@ Room.prototype.handleReservedRoom = function() {
         Game.rooms[this.memory.base].memory.queue.push({
           role: 'defender',
           routing: {
-            targetRoom: this.room.name
+            targetRoom: roomName
           },
         });
         this.memory.defender_last_called = Game.time;
