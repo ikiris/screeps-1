@@ -302,15 +302,15 @@ Room.prototype.checkHostiles = function() {
     console.log('Threat:' + roomName);
     if (hostiles.length > _.filter(Game.find(FIND_MY_CREEPS, (c) => c.memory.role === 'defender' && c.memory.routing.targetRoom === roomName)) && (!this.memory.defender_last_called || Game.time - this.memory.defender_last_called > 200)) {
       console.log('Request defender:' + roomName);
-        Game.rooms[this.memory.reservation.base].memory.queue.push({
-          role: 'defender',
-          routing: {
-            targetRoom: roomName
-          },
-        });
-        this.memory.defender_last_called = Game.time;
-      }
+      Game.rooms[this.memory.reservation.base].memory.queue.push({
+        role: 'defender',
+        routing: {
+          targetRoom: roomName
+        },
+      });
+      this.memory.defender_last_called = Game.time;
     }
+  }
 
   let idiotCreeps = _.filter(hostiles, {
     filter: this.findAttackCreeps
@@ -343,8 +343,8 @@ Room.prototype.checkReservers = function() {
     return false;
   }
   let roomName = this.name;
-  let reservers = _.filter(Game.creeps, function(c){
-      return c.memory.role === 'reserver' && c.memory.routing.targetRoom === roomName;
+  let reservers = _.filter(Game.creeps, function(c) {
+    return c.memory.role === 'reserver' && c.memory.routing.targetRoom === roomName;
   });
   if (reservers.length === 0) {
     this.checkAndSpawnReserver();
