@@ -356,7 +356,7 @@ Room.prototype.checkReservers = function() {
 Room.prototype.handleUnreservedRoom = function() {
   this.memory.state = 'Unreserved';
   this.memory.lastSeen = Game.time;
-  if (this.memory.lastChecked !== undefined && Game.time - this.memory.lastChecked < 500) {
+  if (this.memory.lastChecked !== undefined && Game.time - this.memory.lastChecked < 50) {
     return true;
   }
 
