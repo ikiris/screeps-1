@@ -92,10 +92,16 @@ Room.prototype.setFillerArea = function(storagePos, route) {
 
       let powerSpawnPosIterator = fillerPos.findNearPosition();
       for (let powerSpawnPos of powerSpawnPosIterator) {
+        costMatrix.set(powerSpawnPos.x, powerSpawnPos.y, config.layout.structureAvoid);
+        this.setMemoryCostMatrix(costMatrix);
+
         this.memory.position.structure.powerSpawn.push(powerSpawnPos);
 
         let towerPosIterator = fillerPos.findNearPosition();
         for (let towerPos of towerPosIterator) {
+          costMatrix.set(towerPos.x, towerPos.y, config.layout.structureAvoid);
+          this.setMemoryCostMatrix(costMatrix);
+
           this.memory.position.structure.tower.push(towerPos);
           return;
         }
