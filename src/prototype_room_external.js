@@ -297,18 +297,20 @@ Room.prototype.checkHostiles = function() {
   if (hostiles.length > 0) {
     this.memory.lastHostile = Game.time;
   }
-  if (!Game.time - this.memory.lastHostile > 600) {
+  if (Game.time - this.memory.lastHostile < 600) {
     roomName = this.name;
+    console.log('Threat:' + roomName);
     if (hostiles.length > _.filter(Game.find(FIND_MY_CREEPS, (c) => c.memory.role === 'defender' && c.memory.routing.targetRoom === roomName)) && (!this.memory.defender_last_called || Game.time - this.memory.defender_last_called > 200)) {
-      Game.rooms[this.memory.reservation.base].memory.queue.push({
-        role: 'defender',
-        routing: {
-          targetRoom: roomName
-        },
-      });
-      this.memory.defender_last_called = Game.time;
+      console.log('Request defender:' + roomName);
+        Game.rooms[this.memory.reservation.base].memory.queue.push({
+          role: 'defender',
+          routing: {
+            targetRoom: roomName
+          },
+        });
+        this.memory.defender_last_called = Game.time;
+      }
     }
-  }
 
   let idiotCreeps = _.filter(hostiles, {
     filter: this.findAttackCreeps
@@ -328,9 +330,9 @@ Room.prototype.checkSourcers = function() {
       sourcers[s.memory.routing.targetId] = s.name;
     }
 
-    if (sourcers.length < sources.length) {
-      if (sourcer.id === undefined) {
-        Game.rooms[creep.memory.base].checkRoleToSpawn('sourcer', 1, source.id, source.pos.roomName);
+    for (let s of sources) {
+      if (sourcers[s.id] === undefined) {
+        Game.rooms[this.memory.reservation.base].checkRoleToSpawn('sourcer', 1, s.id, s.pos.roomName);
       }
     }
   }
@@ -340,8 +342,9 @@ Room.prototype.checkReservers = function() {
   if (this.controller.reservation.ticksToEnd > 1000) {
     return false;
   }
-  let reservers = _.filter(Game.creeps, {
-    filter: (c) => c.memory.role === 'reserver',
+  let roomName = this.name;
+  let reservers = _.filter(Game.creeps, function(c){
+      return c.memory.role === 'reserver' && c.memory.routing.targetRoom === roomName;
   });
   if (reservers.length === 0) {
     this.checkAndSpawnReserver();
