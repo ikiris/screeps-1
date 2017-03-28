@@ -343,7 +343,7 @@ Room.prototype.checkSourcers = function() {
 };
 
 Room.prototype.checkReservers = function() {
-  if (this.controller.reservation.ticksToEnd > 1000) {
+  if (this.controller.reservation && this.controller.reservation.ticksToEnd > 1000) {
     return false;
   }
   let roomName = this.name;
