@@ -299,12 +299,10 @@ Room.prototype.checkHostiles = function() {
   }
   if (Game.time - this.memory.lastHostile < 600) {
     roomName = this.name;
-    console.log('Threat:' + roomName);
     if (!this.memory.defender_last_called || Game.time - this.memory.defender_last_called > 200) {
       if (hostiles.length > _.filter(Game.creeps, function(c) {
           return c.memory.role === 'defender' && c.memory.routing.targetRoom === roomName;
         })) {
-        console.log('Request defender:' + roomName);
         Game.rooms[this.memory.reservation.base].memory.queue.push({
           role: 'defender',
           routing: {
