@@ -323,7 +323,7 @@ Room.prototype.checkHostiles = function() {
 };
 
 Room.prototype.checkSourcers = function() {
-  if (this.controller.reservation && this.controller.reservation.username === Memory.username) {
+  if (this.controller.reservation && this.controller.reservation.username === Memory.username && this.memory.reservation) {
     let sources = this.find(FIND_SOURCES);
     let roomName = this.name;
     let sourcers = {};
