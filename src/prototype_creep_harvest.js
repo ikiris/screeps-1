@@ -81,14 +81,8 @@ Creep.prototype.spawnCarry = function() {
     }
   }
 
-  if (energies.length > 0 && energies[0].amount < 50) {
+  if (energies.length > 0 && _.sum(_.map(energies, 'amount')) < (this.inBase() ? energyThreshold : 50)) {
     return false;
-  }
-
-  if (this.inBase()) {
-    if (energies.length > 0 && energies[0].amount < energyThreshold) {
-      return false;
-    }
   }
 
   if (!existInArray(Game.rooms[this.memory.base].memory.queue, spawn)) {
@@ -96,6 +90,9 @@ Creep.prototype.spawnCarry = function() {
       this.memory.wait = 0;
     }
     if (this.memory.wait <= 0) {
+      if (this.room.memory.roles && this.room.memory.roles.carry) {
+        this.room.memory.roles.carry = false;
+      }
       Game.rooms[this.memory.base].checkRoleToSpawn('carry', 2, this.memory.routing.targetId, this.memory.routing.targetRoom);
       this.memory.wait = waitTime;
     }

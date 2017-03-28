@@ -78,7 +78,7 @@ global.config = {
   carryHelpers: {
     ticksUntilHelpCheck: 100,
     maxHelpersAmount: 5,
-    helpTreshold: 1500,
+    helpTreshold: 5000,
     needTreshold: 750,
     maxDistance: 7,
     factor: 0.2
@@ -185,7 +185,8 @@ global.config = {
       harvester: 1,
       sourcer: 2,
       storagefiller: 3,
-      defendranged: 3
+      defendranged: 3,
+      default: 4
     },
     otherRoom: {
       harvester: 1,
@@ -194,8 +195,10 @@ global.config = {
       nextroomer: 5,
       reserver: 6,
       carry: 7,
-      sourcer: 8
-    }
+      sourcer: 8,
+      default: 20
+    },
+    default: 12
   }
 };
 

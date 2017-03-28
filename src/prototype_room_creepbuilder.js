@@ -22,11 +22,11 @@ Room.prototype.getPriority = function(object) {
   let priority = config.priorityQueue;
   let target = object.routing && object.routing.targetRoom;
   if (target === this.name) {
-    return priority.sameRoom[object.role] || 4;
+    return priority.sameRoom[object.role] || priority.sameRoom.default || 4;
   } else if (target) {
-    return priority.otherRoom[object.role] || 20 + Game.map.getRoomLinearDistance(this.name, target);
+    return priority.otherRoom[object.role] || priority.otherRoom['default'] + Game.map.getRoomLinearDistance(this.name, target);
   } else {
-    return 12;
+    return priority.default;
   }
 };
 
@@ -179,6 +179,31 @@ Room.prototype.getSettings = function(creep) {
   let role = creep.role;
   let updateSettings = roles[role].updateSettings && roles[role].updateSettings(this, creep);
   let settings = _.merge(roles[role].settings, updateSettings);
+
+  if (creep.role === 'sourcer' && creep.routing.targetRoom === this.name) {
+    let roomName = this.name;
+    if (_.filter(this.find(FIND_MY_CREEPS), function(c) {
+        return (c.memory.role === 'sourcer' && c.memory.routing.targetRoom === roomName && creep.routing.targetId == c.memory.routing.targetId);
+      }).length === 0) {
+      console.log('fallback sourcer!');
+      settings = {
+        param: ['energyAvailable'],
+        prefixString: {
+          1: 'WCM',
+          450: 'WWCM',
+          600: 'WWWCM',
+          700: 'WWWWCMM',
+          850: 'WWWWCMMM',
+        },
+        layoutString: {
+          1: 'M',
+        },
+        maxLayoutAmount: {
+          1: 1,
+        },
+      };
+    }
+  }
   if (!settings) {
     this.log('try to spawn ', role, ' but settings are not done. Abort spawn');
     return;
