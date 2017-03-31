@@ -120,7 +120,19 @@ Room.prototype.checkRoleToSpawn = function(role, amount, targetId, targetRoom, l
   if (this.memory.roles && this.memory.roles[creepMemory.role] && Game.time % 10) {
     return false;
   }
-  if (this.inQueue(creepMemory) || this.inRoom(creepMemory, amount)) { return false; }
+  if (this.inQueue(creepMemory)) { return false; }
+  let creeps = Game.creeps;
+  let spawns = this.find(FIND_MY_SPAWNS);
+
+  creeps = _.filter(creeps, creep => {
+    if (!creep.memory.routing) { return false; }
+    let creepTarget = {
+      targetId: creep.memory.routing.targetId,
+      targetRoom: creep.memory.routing.targetRoom
+    };
+    return _.eq(creepMemory.routing, creepTarget) && role === creep.memory.role;
+  });
+
   if (role === 'harvester') {
     this.log(`checkRoleToSpawn: ${amount} ${this.inQueue(creepMemory)} ${this.inRoom(creepMemory, amount)}`);
   }
